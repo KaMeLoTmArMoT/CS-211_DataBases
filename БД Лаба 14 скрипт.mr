@@ -1,0 +1,103 @@
+/*
+cd Program Files
+cd MongoDB/Server/4.2/bin
+
+mongo --host localhost:27017
+
+mongod.exe
+*/
+
+
+use shop
+
+db.createCollection("coment")
+db.createCollection("product")
+db.createCollection("basket")
+db.createCollection("order")
+db.createCollection("client")
+db.createCollection("way")
+db.createCollection("stops")
+db.createCollection("car")
+db.createCollection("driver")
+
+db.coment.renameCollection("comment")
+
+// db.collection.drop()
+
+db.client.insertOne(
+    {
+        "name": "Andrii",
+        "surname": "Sheba",
+        "age": 19,
+        "email": "mail@mail.ua",
+        "tel": 380000,
+        "reg_date": new Date()
+    }
+)
+
+db.client.insertMany([
+    {
+        "name": "Andrii2",
+        "surname": "Sheba",
+        "age": 19,
+        "email": "mail@mail.ua",
+        "tel": 380000,
+        "reg_date": new Date()
+    },
+    {
+        "name": "Andrii3",
+        "surname": "Sheba",
+        "age": 19,
+        "email": "mail@mail.ua",
+        "tel": 380000,
+        "reg_date": new Date()
+    }
+])
+
+document = ({"name": "Doc", "age": 30, "email": "anonymus"});
+db.client.insert(document);
+
+// Find set
+
+db.client.find();
+
+db.client.find().count();
+
+db.client.find().limit(1);
+
+db.client.find({}, {_id: 0}).limit(1);
+
+db.client.find({}, {_id: 0}).sort({name: -1});
+
+db.client.find({}, {_id: 0}).sort({name: -1, age: 1});
+
+db.client.find({age: 19, name: "Andrii"}, {_id: 0});
+
+db.client.find({$or: [{age: {$lt: 19}}]}, {_id: 0});
+db.client.find({$or: [{age: {$ne: 19}}]}, {_id: 0});
+
+db.client.find({name: {$in: ["Andrii2", "Andrii3"]}}, {_id: 0});
+
+// Update / Delete set
+
+db.client.updateOne({name: "Andrii"}, {$set: {age: 111}});
+
+db.client.replaceOne({age: 30}, {name: "New user", hasCar: true, password: 1234});
+
+db.client.deleteOne({email: "mail@mail.ua"});
+
+// Cursor
+
+var cursor = db.client.find()
+while(cursor.hasNext()){
+    obj = cursor.next()
+    print(obj["name"])
+}
+
+// indexes
+
+db.client.ensureIndex({"search": 1}, {"unique": true})
+
+db.client.indexes.find()
+
+db.client.dropIndex("name_1")
